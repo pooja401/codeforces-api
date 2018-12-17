@@ -1,0 +1,407 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>codeforces account information</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" >
+</script>
+
+ <style> 
+body{
+     background-image: url("a123.jpeg");
+      background-repeat: no-repeat;
+       background-position: center;
+        background-size: cover;
+    width: 700px;
+    height: 700px;
+}
+img {
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  padding: 5px;
+  width: 150px;
+}
+table, th, td {
+  background-color: white;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+}
+.user
+{
+font-size: 40px;
+font-weight: bold;
+margin=10px ;
+padding=10px;
+}
+.properties{
+font-size:20px: 
+margin=10p;
+padding=10px;
+}
+
+ 
+.navbar{
+    padding-top: 15x;
+    font-size: 20px;
+    width:1200px;
+    position:relative;
+    margin-right: 40px;
+}
+.name
+{
+    padding: 25px 50px 75px 100px;
+    font-family: "Times New Roman", Times, serif;
+    text-transform: uppercase;
+    font-size: 20px;
+}
+/* The navbar container */
+.topnav a {
+  overflow: hidden;
+  background-color: white;
+}
+
+/* Navbar links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Links - change color on hover */
+.topnav a:hover {
+  background-color: white;
+  color: black;
+}
+
+
+</style></head>
+
+
+
+<body>
+    <a href=""><img class="logo" src="codeforces.jpg"></style></a>
+     
+   HANDLE: <input type="text" id="handle1">
+   <input type="submit" id="submit" onclick="checkUser();">
+    
+ 
+<div class="jumbotron" style="background-color=orange;" >
+  <h1 id="name"  ></h1>
+  
+</div>
+<table id="result"></table>
+<div id="container" style="width:100%; height:400px;"></div>
+<div id="chartContainer" style="width:100%; height:400px;"></div>
+
+
+
+<script>
+  var a;
+  function checkUser()
+  {
+     a=document.getElementById("handle1").value;
+    $.ajax({
+        url: "https://codeforces.com/api/user.info?handles="+a,
+        type: "GET",
+        dataType: "json", // added data type
+        success: function(res) {
+            //console.log(res)
+            alert(res.status);
+            USERPROFILE(a);
+
+        },
+        error: function(res) {
+            //console.log(res)
+            alert("user not found");
+        },
+    });
+
+  }
+
+  function USERPROFILE(a)
+  {
+
+document.getElementById('result').innerHTML=" ";
+var xhttp1= new XMLHttpRequest();
+ xhttp1.onreadystatechange=function(){
+                                    if(this.readyState==4 && this.status==200)
+                                    {
+                                       var data = this.responseText;
+        var jsonResponse = JSON.parse(data);
+                                      
+        var row1=jsonResponse.result[0]
+        console.log(row1);
+        
+        var table = document.createElement('table');
+        table.setAttribute('class', 'history');
+        var properties =Object.keys(row1);
+   
+            
+        var capitalize = function(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        }
+        var tr = document.createElement('tr');
+        for (var i = 0; i < properties.length; i++) {
+
+            var th = document.createElement('th');
+            th.appendChild(document.createTextNode(properties[i]));
+            tr.appendChild(th);
+        }
+        table.appendChild(tr);
+        var tr, row;
+        for (var r = 0; r < 1; r++) {
+            tr = document.createElement('tr');
+            row = Object.values(row1);console.log(row[6]);
+            document.getElementById("name").innerHTML=row1["handle"];
+            
+            for (var i = 0; i < row.length; i++) {
+                var td = document.createElement('td');
+                td.appendChild(document.createTextNode(row[i]));
+                
+                tr.appendChild(td);}
+            
+            table.appendChild(tr);
+        }
+        document.getElementById('result').appendChild(table);
+
+    }
+};
+ xhttp1.open("GET","https://codeforces.com/api/user.info?handles="+a,true);
+ xhttp1.send();
+
+
+
+/*
+ /*var xhttp = new XMLHttpRequest();
+ xhttp.onreadystatechange=function(){
+                                    if(this.readyState==4 && this.status==200)
+                                    {
+                                        var o=JSON.parse(xhttp.responseText);
+                                        var info=o.result;
+                                        //var name=a[0].lastName;
+
+                                        //console.log(a[0].country)
+                                        pushIt(info);
+                                        
+                                        
+                                    }
+                                    };
+ xhttp.open("GET","https://codeforces.com/api/user.info?handles="+a,true);
+ xhttp.send();
+
+
+
+
+
+function pushIt(d)
+{
+   document.getElementById("f_name").innerHTML = d.firstName
+   document.getElementById("myText").innerHTML = d.lastName
+   document.getElementById("frends").innerHTML = d.friendOfCount
+   document.getElementById("rating").innerHTML = d.rating
+   document.getElementById("country").innerHTML = d.country
+   document.getElementById("org").innerHTML = d.organization
+   document.getElementById("handle").innerHTML = d.handle
+    
+}*/
+
+
+//graph
+ var xhttp3= new XMLHttpRequest();
+ xhttp3.onreadystatechange=function(){
+                                  if(this.readyState==4 && this.status==200)
+                                  {
+                                    var o=JSON.parse(xhttp3.responseText);
+                                    //console.log(o);
+                                        var rate=[];
+                                        rate=o.result;
+                                        //console.log(a.rank)
+                                    graph(rate);
+                                  }
+                                    };
+ xhttp3.open("GET","https://codeforces.com/api/user.rating?handle="+a,true);
+ xhttp3.send();
+  
+
+ var c;
+ function graph(rate1)
+ {
+     c=[];
+     d=[];
+    for(var i=0;i<rate1.length;i++)
+    {
+        //cosole.log(a[i].rank)
+        c.push(rate1[i].rank);
+        d.push(rate1[i].contestId)
+    }
+
+
+    Highcharts.chart('container', {
+
+    title: {
+        text: 'rating '
+    },
+
+    subtitle: {
+        text: 'rating'
+    },
+    xAxis:{
+      categories:d
+    },
+    
+   
+    yAxis: {
+        title: {
+            text: 'rating'
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        
+        align: 'right',
+        verticalAlign: 'middle'
+    },
+
+   plotOptions: {
+         series: {
+             label: {
+                  connectorAllowed: false
+              },
+            
+           
+            
+           
+         }
+     },
+
+    series: [{
+
+             name:"rating",
+             data: c
+         },
+         
+        
+    ],
+});
+    
+
+
+ responsive: {
+         rules: [{
+             condition: {
+                 maxWidth: 500
+             },
+             chartOptions: {
+                legend: {
+                     layout: 'horizontal',
+                     align: 'center',
+                     verticalAlign: 'bottom'
+                 }
+             }
+         }]
+     }
+
+ }
+  
+ //piechart   
+
+  var xhttp2 = new XMLHttpRequest();
+
+
+ xhttp2.onreadystatechange=function(){
+                                    if(this.readyState==4 && this.status==200)
+                                    {
+                                        var pchart=JSON.parse(xhttp2.responseText);
+                                        console.log(pchart.result[0].verdict);
+                                         piechart(pchart)
+                                    }                              };
+                                   
+ xhttp2.open("GET","https://codeforces.com/api/user.status?handle="+a,true);
+ xhttp2.send();
+
+ function piechart(p_chart)
+ {
+
+  var count_right=0;
+    var count_wrong=0;
+    var count_tle=0
+    var count_per1;
+    var count_per2;
+    var count_per3;
+
+
+  for(var i=0;i<p_chart.result.length;i++)
+    {
+      console.log(5)
+      if(p_chart.result[i].verdict==="OK")
+      {
+        count_right++;
+      }
+      else if(p_chart.result[i].verdict==="WRONG_ANSWER")
+      {
+        count_wrong++;
+      }
+      else if(p_chart.result[i].verdict==="MEMORY_LIMIT_EXCEEDED")
+      {
+         count_tle++
+      }
+    }
+    //console.log(count_right);
+    //console.log(count_wrong);
+    //console.log(count_tle);
+
+
+    count_per1=(count_tle/(count_tle+count_right+count_wrong))*100;
+    count_per2=(count_right/(count_tle+count_right+count_wrong))*100;
+    count_per3=(count_wrong/(count_tle+count_right+count_wrong))*100;
+
+    console.log(count_per1);
+     console.log(count_per2);
+     console.log(count_per3);
+    
+
+    var chart = new CanvasJS.Chart("chartContainer",
+    {
+      title:{
+        text: "rating of codeforces"
+      },
+      data: [
+      {
+       type: "doughnut",
+       dataPoints: [
+       {  y: count_per1, indexLabel: "right answers" },
+       {  y: count_per2, indexLabel: "wrong answer" },
+       {  y: count_per3, indexLabel: "memory limit exceeded" }
+       ]
+       
+      }
+     ]
+   });
+
+    chart.render();
+ }
+}
+
+ </script>
+
+</body>
+</html>
+
